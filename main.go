@@ -13,8 +13,14 @@ func providerAndDomain(ctx *pulumi.Context) error {
 		return err
 	}
 
-	// TODO play with Machine DomainArg here, this is emitting kvm by default
-	_, err = libvirt.NewDomain(ctx, "ubuntu", &libvirt.DomainArgs{Name: pulumi.String("HelloUbuntu")}, pulumi.Provider(provider))
+	domainArgs := &libvirt.DomainArgs{
+		Name:     pulumi.String("HelloUbuntu"),
+		Arch:     pulumi.String("aarch64"),
+		Emulator: pulumi.String("/opt/homebrew/bin/qemu-system-aarch64"),
+	}
+
+	// TODO play with Machine value here, this is emitting
+	_, err = libvirt.NewDomain(ctx, "ubuntu", domainArgs, pulumi.Provider(provider))
 	if err != nil {
 		return err
 	}
